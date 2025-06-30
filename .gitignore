@@ -28,7 +28,7 @@ Thumbs.db
 .gradle
 build/
 target/
-!target/libs/
+!build/libs/
 out/
 .micronaut/
 .idea
