@@ -2,7 +2,6 @@ package com.learning.service;
 
 import com.learning.dto.Pet;
 import com.learning.dto.Tag;
-import com.learning.exceptions.InvalidPetStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -209,12 +208,5 @@ class PetServiceImplTest {
         assertEquals(2, pets.size());
         assertTrue(pets.contains(pet1));
         assertTrue(pets.contains(pet2));
-    }
-
-    @Test
-    void testSetStatusWithInvalidValue() {
-        Pet pet = new Pet();
-        Exception exception = assertThrows(InvalidPetStatus.class, () -> pet.setStatus("INVALID_STATUS"));
-        assertTrue(exception.getMessage().contains("Invalid pet status"));
     }
 }

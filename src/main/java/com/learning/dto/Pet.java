@@ -3,12 +3,10 @@ package com.learning.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.learning.exceptions.InvalidPetStatus;
 import io.micronaut.core.annotation.Introspected;
 import io.micronaut.serde.annotation.Serdeable.Deserializable;
 import io.micronaut.serde.annotation.Serdeable.Serializable;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -30,7 +28,7 @@ public class Pet {
     @JacksonXmlElementWrapper(localName = "tags")
     @JsonProperty("tags")
     private List<Tag> tags;
-    private Status status;
+    private String status;
 
     public int getId() {
         return id;
@@ -73,15 +71,11 @@ public class Pet {
     }
 
     public String getStatus() {
-        return status.name();
+        return status;
     }
 
     public void setStatus(String status) {
-        try {
-            this.status = Status.valueOf(status);
-        } catch (Exception e) {
-            throw new InvalidPetStatus("Invalid pet status: " + status + ". Valid values are: " + Arrays.toString(Status.values()));
-        }
+        this.status = status;
     }
 
     @Override

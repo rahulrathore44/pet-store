@@ -3,9 +3,10 @@ package com.learning.controller;
 import com.learning.dto.Pet;
 import com.learning.dto.xml.PetList;
 import com.learning.exceptions.ErrorResponse;
-import com.learning.exceptions.InvalidPetStatus;
+import com.learning.exceptions.InvalidPetIdException;
+import com.learning.exceptions.InvalidPetStatusException;
 import com.learning.service.PetService;
-import io.micronaut.http.HttpHeaders;
+import com.learning.validator.ValidationContext;
 import io.micronaut.http.HttpResponse;
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Body;
@@ -28,10 +29,12 @@ import java.util.List;
 public class PetController {
 
     private final PetService petService;
+    private final ValidationContext validationContext;
 
     @Inject
-    public PetController(PetService petService) {
+    public PetController(PetService petService, ValidationContext validationContext) {
         this.petService = petService;
+        this.validationContext = validationContext;
     }
 
     @Get("/all")
@@ -48,9 +51,10 @@ public class PetController {
     @Get("/findPetsByStatus")
     public HttpResponse<?> findPetsByStatus(@QueryValue String status) {
         try {
+            validationContext.getPetStatusValidator().validate(status);
             List<Pet> pets = petService.findPetsByStatus(status);
             return pets.isEmpty() ? HttpResponse.noContent() : HttpResponse.ok(new PetList(pets));
-        } catch (InvalidPetStatus ex) {
+        } catch (InvalidPetStatusException ex) {
             return HttpResponse.badRequest(new ErrorResponse(ex.getMessage()));
         }
     }
@@ -61,8 +65,14 @@ public class PetController {
     }
 
     @Post
-    public Pet addPet(@Body Pet pet) {
-        return petService.addPet(pet);
+    public HttpResponse<?> addPet(@Body Pet pet) {
+        try {
+            validationContext.getPetIdValidator().validate(pet.getId());
+            validationContext.getPetStatusValidator().validate(pet.getStatus());
+            return HttpResponse.created(petService.addPet(pet));
+        } catch (InvalidPetStatusException | InvalidPetIdException ex) {
+            return HttpResponse.badRequest(new ErrorResponse(ex.getMessage()));
+        }
     }
 
     @Put
