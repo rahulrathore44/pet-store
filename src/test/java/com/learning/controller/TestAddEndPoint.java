@@ -248,12 +248,25 @@ class TestAddEndPoint {
     }
 
     @Test
-    void testAddPet_XML_to_XML_String_Invalid() {
+    void testAddPet_XML_to_XML_String_Invalid_Status() {
         var requestBody = "<pet><id>1</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>not-available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
 
         HttpRequest<?> request = HttpRequest.POST(BASE_URL, requestBody)
                 .contentType(MediaType.APPLICATION_XML)
                 .accept(MediaType.APPLICATION_XML);
+
+        var response = assertThrows(HttpClientResponseException.class, () -> client.toBlocking().exchange(request, String.class));
+
+        assertEquals(400, response.getStatus().getCode());
+    }
+
+    @Test
+    void testAddPet_XML_to_JSON_String_Invalid_Id() {
+        var requestBody = "<pet><id>-1</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
+
+        HttpRequest<?> request = HttpRequest.POST(BASE_URL, requestBody)
+                .contentType(MediaType.APPLICATION_XML)
+                .accept(MediaType.APPLICATION_JSON);
 
         var response = assertThrows(HttpClientResponseException.class, () -> client.toBlocking().exchange(request, String.class));
 
