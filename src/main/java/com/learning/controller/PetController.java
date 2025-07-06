@@ -52,7 +52,7 @@ public class PetController {
     @ApiResponse(
             responseCode = "200",
             description = "List of all pets",
-            content = @Content(schema = @Schema(implementation = Pet.class))
+            content = @Content(schema = @Schema(implementation = PetList.class))
     )
     @ApiResponse(
             responseCode = "204",
