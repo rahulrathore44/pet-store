@@ -6,12 +6,12 @@
         <name>Dogs</name>
     </category>
     <photoUrls>
-        <photoUrl>string</photoUrl>
+        <photoUrl>http://localhost:8080/pic.jpg</photoUrl>
     </photoUrls>
     <tags>
         <tag>
-            <id>0</id>
-            <name>string</name>
+            <id>1</id>
+            <name>Good Dog</name>
         </tag>
     </tags>
     <status>available</status>

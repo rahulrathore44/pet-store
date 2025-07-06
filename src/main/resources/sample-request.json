@@ -1,0 +1,18 @@
+{
+    "id": 1,
+    "name": "Bruno",
+    "category": {
+        "id": 1,
+        "name": "Dog"
+    },
+    "photoUrls": [
+        "http://localhost:8080/pic.jpg"
+    ],
+    "tags": [
+        {
+            "id": 1,
+            "name": "Good Dog"
+        }
+    ],
+    "status": "available"
+}
