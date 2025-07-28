@@ -2,6 +2,7 @@ package com.learning.controller;
 
 import com.learning.dto.Pet;
 import com.learning.dto.xml.PetList;
+import com.learning.exceptions.DuplicatePetIdException;
 import com.learning.exceptions.ErrorResponse;
 import com.learning.exceptions.InvalidPetIdException;
 import com.learning.exceptions.InvalidPetStatusException;
@@ -19,13 +20,11 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
-import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -106,6 +105,11 @@ public class PetController {
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))
     )
     @ApiResponse(
+            responseCode = "422",
+            description = "Unprocessable Entity",
+            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+    )
+    @ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = @Content(schema = @Schema(implementation = ErrorResponse.class))
@@ -122,6 +126,8 @@ public class PetController {
             return HttpResponse.created(petService.addPet(pet));
         } catch (InvalidPetStatusException | InvalidPetIdException ex) {
             return HttpResponse.badRequest(new ErrorResponse(ex.getMessage()));
+        } catch (DuplicatePetIdException ex) {
+            return HttpResponse.unprocessableEntity().body(new ErrorResponse(ex.getMessage()));
         }
     }
 

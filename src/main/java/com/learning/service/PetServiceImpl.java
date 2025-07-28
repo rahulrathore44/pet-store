@@ -1,6 +1,7 @@
 package com.learning.service;
 
 import com.learning.dto.Pet;
+import com.learning.exceptions.DuplicatePetIdException;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +26,9 @@ public class PetServiceImpl implements PetService {
 
     @Override
     public Pet addPet(Pet pet) {
+        if (petStore.containsKey(pet.getId())) {
+            throw new DuplicatePetIdException("Pet with ID " + pet.getId() + " already exists");
+        }
         petStore.put(pet.getId(), pet);
         logger.info("Added pet with ID: {}, and details: {}", pet.getId(), pet);
         return pet;
