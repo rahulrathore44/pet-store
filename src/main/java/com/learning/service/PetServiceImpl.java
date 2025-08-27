@@ -2,6 +2,8 @@ package com.learning.service;
 
 import com.learning.dto.Pet;
 import com.learning.exceptions.DuplicatePetIdException;
+import com.learning.storage.PetStorage;
+import jakarta.inject.Inject;
 import jakarta.inject.Singleton;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,7 +19,12 @@ import java.util.stream.Collectors;
 public class PetServiceImpl implements PetService {
 
     private final Logger logger = LoggerFactory.getLogger(PetServiceImpl.class);
-    private final Map<Integer, Pet> petStore = new HashMap<>();
+    private final Map<Integer, Pet> petStore;
+
+    @Inject
+    public PetServiceImpl(PetStorage storage) {
+        this.petStore = storage.getPetStore();
+    }
 
     @Override
     public List<Pet> getAllPets() {

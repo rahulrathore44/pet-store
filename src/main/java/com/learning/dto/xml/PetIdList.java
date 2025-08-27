@@ -4,9 +4,7 @@ package com.learning.dto.xml;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
-import com.learning.dto.Pet;
 import io.micronaut.core.annotation.Introspected;
-import io.micronaut.serde.annotation.Serdeable;
 import io.micronaut.serde.annotation.Serdeable.Deserializable;
 import io.micronaut.serde.annotation.Serdeable.Serializable;
 
@@ -16,23 +14,24 @@ import java.util.List;
 @Deserializable
 @Introspected
 @JacksonXmlRootElement(localName = "pets")
-public class PetList {
+public class PetIdList {
 
-    @JacksonXmlProperty(localName = "pet")
     @JacksonXmlElementWrapper(useWrapping = false)
-    private List<Pet> pets;
+    @JacksonXmlProperty(localName = "id")
+    private List<Integer> petIds;
 
-    public PetList(List<Pet> pets) {
-        this.pets = pets;
+    public PetIdList(List<Integer> petIds) {
+        this.petIds = petIds;
     }
 
-    public PetList(){}
-
-    public List<Pet> getPets() {
-        return pets;
+    public PetIdList() {
     }
 
-    public void setPets(List<Pet> pets) {
-        this.pets = pets;
+    public List<Integer> getPetIds() {
+        return petIds;
+    }
+
+    public void setPetIds(List<Integer> petIds) {
+        this.petIds = petIds;
     }
 }

@@ -59,7 +59,7 @@ class TestAddEndPoint {
     void testAddPet_JSON_to_XML() {
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(2).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -82,7 +82,7 @@ class TestAddEndPoint {
     void testAddPet_XML_to_JSON() {
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(3).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -105,7 +105,7 @@ class TestAddEndPoint {
     void testAddPet_XML_to_XML() {
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(4).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -128,7 +128,7 @@ class TestAddEndPoint {
     void testAddPet_JSON_to_JSON_String() {
         var expectedResponse = """
                     {
-                      "id" : 1,
+                      "id" : 5,
                       "name" : "doggie",
                       "category" : {
                         "id" : 1,
@@ -144,7 +144,7 @@ class TestAddEndPoint {
                 """.trim();
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(5).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -165,10 +165,10 @@ class TestAddEndPoint {
 
     @Test
     void testAddPet_JSON_to_XML_String() {
-        var expectedResponse = "<pet><id>1</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
+        var expectedResponse = "<pet><id>6</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(6).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -190,7 +190,7 @@ class TestAddEndPoint {
     void testAddPet_XML_to_JSON_String() {
         var expectedResponse = """
                     {
-                      "id" : 1,
+                      "id" : 7,
                       "name" : "doggie",
                       "category" : {
                         "id" : 1,
@@ -206,7 +206,7 @@ class TestAddEndPoint {
                 """.trim();
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(7).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -226,10 +226,10 @@ class TestAddEndPoint {
 
     @Test
     void testAddPet_XML_to_XML_String() {
-        var expectedResponse = "<pet><id>1</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
+        var expectedResponse = "<pet><id>8</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
         var tag = TagBuilder.create().id(1).name("dog").build();
         var category = CategoryBuilder.create().id(1).name("dog category").build();
-        var pet = PetBuilder.create().id(1).name("doggie")
+        var pet = PetBuilder.create().id(8).name("doggie")
                 .category(category)
                 .photoUrls(Collections.singletonList("http://example.com/photo1.jpg"))
                 .tags(Collections.singletonList(tag))
@@ -249,7 +249,7 @@ class TestAddEndPoint {
 
     @Test
     void testAddPet_XML_to_XML_String_Invalid_Status() {
-        var requestBody = "<pet><id>1</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>not-available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
+        var requestBody = "<pet><id>9</id><name>doggie</name><category><id>1</id><name>dog category</name></category><status>not-available</status><photoUrls><photoUrls>http://example.com/photo1.jpg</photoUrls></photoUrls><tags><tags><id>1</id><name>dog</name></tags></tags></pet>";
 
         HttpRequest<?> request = HttpRequest.POST(BASE_URL, requestBody)
                 .contentType(MediaType.APPLICATION_XML)

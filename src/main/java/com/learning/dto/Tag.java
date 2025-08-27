@@ -16,6 +16,8 @@ public class Tag {
         this.name = name;
     }
 
+    public Tag(){}
+
     private String name;
 
     public int getId() {

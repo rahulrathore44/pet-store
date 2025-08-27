@@ -2,6 +2,7 @@ package com.learning.service;
 
 import com.learning.dto.Pet;
 import com.learning.dto.Tag;
+import com.learning.storage.PetStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,10 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class PetServiceImplTest {
 
     private PetServiceImpl petService;
+    private PetStorage storage;
 
     @BeforeEach
     void setUp() {
-        petService = new PetServiceImpl();
+        storage = new PetStorage();
+        petService = new PetServiceImpl(storage);
     }
 
     @Test
@@ -162,6 +165,7 @@ class PetServiceImplTest {
     @Test
     void testFindPetsByTags_NoMatchOrNoTags() {
         Pet pet = new Pet();
+        pet.setId(1);
         pet.setName("Daisy");
         pet.setStatus("available");
         pet.setTags(List.of(new Tag(1, "playful")));
@@ -173,6 +177,7 @@ class PetServiceImplTest {
 
         // Pet with null tags
         Pet pet2 = new Pet();
+        pet.setId(2);
         pet2.setName("NoTag");
         pet2.setStatus("available");
         pet2.setTags(null);
