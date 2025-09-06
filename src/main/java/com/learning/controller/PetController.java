@@ -1,5 +1,8 @@
 package com.learning.controller;
 
+import com.learning.annotations.AddPet;
+import com.learning.annotations.FindPetByStatus;
+import com.learning.annotations.GetAllPets;
 import com.learning.annotations.GetPetById;
 import com.learning.dto.Pet;
 import com.learning.dto.xml.PetList;
@@ -22,13 +25,6 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.inject.Inject;
 
 import java.util.List;
@@ -49,25 +45,7 @@ public class PetController {
     }
 
     @Get("/all")
-    @Operation(
-            summary = "Get All Pets",
-            description = "Retrieves a list of all pets. If no pets are found, returns a 204 No Content response."
-    )
-    @ApiResponse(
-            responseCode = "200",
-            description = "List of all pets",
-            content = @Content(schema = @Schema(implementation = PetList.class))
-    )
-    @ApiResponse(
-            responseCode = "204",
-            description = "No pets found",
-            content = @Content(schema = @Schema(implementation = Void.class))
-    )
-    @ApiResponse(
-            responseCode = "500",
-            description = "Unexpected error",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-    )
+    @GetAllPets
     public HttpResponse<?> getAllPets() {
         List<Pet> pets = petService.getAllPets();
         return pets.isEmpty() ? HttpResponse.noContent() : HttpResponse.ok(new PetList(pets));
@@ -79,11 +57,12 @@ public class PetController {
         try {
             var pet = petService.getPetById(petId);
             return HttpResponse.ok(pet);
-        } catch (NoSuchElementException e) {
-            return HttpResponse.notFound().body(e.getMessage());
+        } catch (NoSuchElementException ex) {
+            return HttpResponse.notFound().body(new ErrorResponse(ex.getMessage()));
         }
     }
 
+    @FindPetByStatus
     @Get("/findPetsByStatus")
     public HttpResponse<?> findPetsByStatus(@QueryValue String status) {
         try {
@@ -101,35 +80,7 @@ public class PetController {
     }
 
     @Post
-    @Operation(
-            summary = "Add a new pet",
-            description = "Creates a new pet in the store"
-    )
-    @ApiResponse(
-            responseCode = "201",
-            description = "Pet created",
-            content = @Content(schema = @Schema(implementation = Pet.class))
-    )
-    @ApiResponse(
-            responseCode = "400",
-            description = "Invalid input",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-    )
-    @ApiResponse(
-            responseCode = "422",
-            description = "Unprocessable Entity",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-    )
-    @ApiResponse(
-            responseCode = "500",
-            description = "Unexpected error",
-            content = @Content(schema = @Schema(implementation = ErrorResponse.class))
-    )
-    @RequestBody(
-            description = "Pet object to add",
-            required = true,
-            content = @Content(schema = @Schema(implementation = Pet.class))
-    )
+    @AddPet
     public HttpResponse<?> addPet(@Body Pet pet) {
         try {
             validationContext.getPetIdValidator().validate(pet.getId());

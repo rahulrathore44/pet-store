@@ -2,6 +2,7 @@ package com.learning.annotations;
 
 import com.learning.dto.Pet;
 import com.learning.exceptions.ErrorResponse;
+import io.micronaut.http.MediaType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
@@ -23,12 +24,18 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @ApiResponse(
         responseCode = "200",
         description = "Pet found",
-        content = @Content(schema = @Schema(implementation = Pet.class))
+        content = {
+                @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = Pet.class)),
+                @Content(mediaType = MediaType.APPLICATION_XML, schema = @Schema(implementation = Pet.class))
+        }
 )
 @ApiResponse(
         responseCode = "404",
         description = "Pet not found",
-        content = @Content(schema = @Schema(implementation = ErrorResponse.class))
+        content = {
+                @Content(mediaType = MediaType.APPLICATION_JSON, schema = @Schema(implementation = ErrorResponse.class)),
+                @Content(mediaType = MediaType.APPLICATION_XML, schema = @Schema(implementation = ErrorResponse.class))
+        }
 )
 public @interface GetPetById {
 }
