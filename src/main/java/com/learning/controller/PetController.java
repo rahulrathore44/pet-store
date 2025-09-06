@@ -1,5 +1,6 @@
 package com.learning.controller;
 
+import com.learning.annotations.GetPetById;
 import com.learning.dto.Pet;
 import com.learning.dto.xml.PetList;
 import com.learning.exceptions.DuplicatePetIdException;
@@ -16,11 +17,14 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Delete;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Patch;
+import io.micronaut.http.annotation.PathVariable;
 import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -28,6 +32,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.inject.Inject;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Controller("/pet")
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
@@ -68,9 +73,15 @@ public class PetController {
         return pets.isEmpty() ? HttpResponse.noContent() : HttpResponse.ok(new PetList(pets));
     }
 
+    @GetPetById
     @Get("/{petId}")
-    public Pet getPetById(int petId) {
-        return petService.getPetById(petId);
+    public HttpResponse<?> getPetById(@PathVariable int petId) {
+        try {
+            var pet = petService.getPetById(petId);
+            return HttpResponse.ok(pet);
+        } catch (NoSuchElementException e) {
+            return HttpResponse.notFound().body(e.getMessage());
+        }
     }
 
     @Get("/findPetsByStatus")

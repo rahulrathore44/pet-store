@@ -1,5 +1,7 @@
 package com.learning.controller;
 
+import com.learning.annotations.UploadPetsFromBinary;
+import com.learning.annotations.UploadPetsFromFile;
 import com.learning.dto.Format;
 import com.learning.dto.xml.PetIdList;
 import com.learning.service.UploadPetImpl;
@@ -28,8 +30,10 @@ public class PetUploadController {
         this.uploadPet = uploadPet;
     }
 
+
     @Post
     @Consumes({MediaType.MULTIPART_FORM_DATA})
+    @UploadPetsFromFile
     public HttpResponse<?> uploadPetsFile(@Part CompletedFileUpload file,
                                           @QueryValue Format format) throws IOException {
         var ids = uploadPet.uploadPets(file.getBytes(), format);
@@ -45,6 +49,7 @@ public class PetUploadController {
         };
     }
 
+    @UploadPetsFromBinary
     @Post(value = "/raw", consumes = {MediaType.APPLICATION_OCTET_STREAM})
     public HttpResponse<?> uploadPetsBytes(@Body byte[] data,
                                            @QueryValue Format format) {
