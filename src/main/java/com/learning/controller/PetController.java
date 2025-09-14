@@ -1,5 +1,6 @@
 package com.learning.controller;
 
+import com.learning.UnleashToggleImpl;
 import com.learning.annotations.AddPet;
 import com.learning.annotations.FindPetByStatus;
 import com.learning.annotations.GetAllPets;
@@ -26,6 +27,8 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
 import jakarta.inject.Inject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -37,6 +40,10 @@ public class PetController {
 
     private final PetService petService;
     private final ValidationContext validationContext;
+    private final Logger logger = LoggerFactory.getLogger(PetController.class.getSimpleName());
+
+    @Inject
+    private UnleashToggleImpl unleashToggle;
 
     @Inject
     public PetController(PetService petService, ValidationContext validationContext) {
@@ -47,6 +54,9 @@ public class PetController {
     @Get("/all")
     @GetAllPets
     public HttpResponse<?> getAllPets() {
+        var unleash = unleashToggle.getInstance();
+        logger.info("Value of feature flag: {}", unleash.isEnabled("IsLLMEnabled"));
+        logger.info("List of all feature flags: {}", unleash.more().getFeatureToggleNames());
         List<Pet> pets = petService.getAllPets();
         return pets.isEmpty() ? HttpResponse.noContent() : HttpResponse.ok(new PetList(pets));
     }
