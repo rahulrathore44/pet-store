@@ -5,6 +5,7 @@ import com.learning.annotations.AddPet;
 import com.learning.annotations.FindPetByStatus;
 import com.learning.annotations.GetAllPets;
 import com.learning.annotations.GetPetById;
+import com.learning.annotations.UpdatePetById;
 import com.learning.dto.Pet;
 import com.learning.dto.xml.PetList;
 import com.learning.exceptions.DuplicatePetIdException;
@@ -109,8 +110,17 @@ public class PetController {
     }
 
     @Patch("/{petId}")
-    public Pet updatePet(int petId, @Body Pet pet) {
-        return petService.updatePet(petId, pet.getName(), pet.getStatus());
+    @UpdatePetById
+    public HttpResponse<?> updatePet(int petId, @Body Pet pet) {
+        try {
+            var updatedPet = petService.updatePet(petId, pet.getName(), pet.getStatus());
+            return HttpResponse.ok().body(updatedPet);
+        } catch (NoSuchElementException ex) {
+            return HttpResponse.notFound().body(new ErrorResponse(ex.getMessage()));
+        } catch (Exception ex) {
+            return HttpResponse.serverError().body(new ErrorResponse(ex.getMessage()));
+        }
+
     }
 
     @Delete("/{petId}")

@@ -126,7 +126,7 @@ public class PetControllerWithDelay {
 
     private void simulateDelay() {
         try {
-            int delay = 500 + random.nextInt(1500); // Delay between 500ms to 2000ms
+            int delay = 500 + random.nextInt(4500); // Delay between 500ms to 5000ms
             Thread.sleep(delay);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
