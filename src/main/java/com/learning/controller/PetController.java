@@ -2,6 +2,7 @@ package com.learning.controller;
 
 import com.learning.UnleashToggleImpl;
 import com.learning.annotations.AddPet;
+import com.learning.annotations.DeletePetById;
 import com.learning.annotations.FindPetByStatus;
 import com.learning.annotations.GetAllPets;
 import com.learning.annotations.GetPetById;
@@ -27,6 +28,12 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.openapi.visitor.security.SecurityRule;
+import io.micronaut.security.annotation.Secured;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +61,7 @@ public class PetController {
 
     @Get("/all")
     @GetAllPets
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public HttpResponse<?> getAllPets() {
         var unleash = unleashToggle.getInstance();
         logger.info("Value of feature flag: {}", unleash.isEnabled("IsLLMEnabled"));
@@ -64,6 +72,7 @@ public class PetController {
 
     @GetPetById
     @Get("/{petId}")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public HttpResponse<?> getPetById(@PathVariable int petId) {
         try {
             var pet = petService.getPetById(petId);
@@ -75,6 +84,7 @@ public class PetController {
 
     @FindPetByStatus
     @Get("/findPetsByStatus")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public HttpResponse<?> findPetsByStatus(@QueryValue String status) {
         try {
             validationContext.getPetStatusValidator().validate(status);
@@ -86,12 +96,14 @@ public class PetController {
     }
 
     @Get("/findPetsByTags")
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public List<Pet> findPetsByTags(@QueryValue List<String> tags) {
         return petService.findPetsByTags(tags);
     }
 
     @Post
     @AddPet
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public HttpResponse<?> addPet(@Body Pet pet) {
         try {
             validationContext.getPetIdValidator().validate(pet.getId());
@@ -105,12 +117,14 @@ public class PetController {
     }
 
     @Put
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public Pet updatePet(@Body Pet pet) {
         return petService.updatePet(pet);
     }
 
     @Patch("/{petId}")
     @UpdatePetById
+    @Secured(SecurityRule.IS_ANONYMOUS)
     public HttpResponse<?> updatePet(int petId, @Body Pet pet) {
         try {
             var updatedPet = petService.updatePet(petId, pet.getName(), pet.getStatus());
@@ -124,6 +138,7 @@ public class PetController {
     }
 
     @Delete("/{petId}")
+    @DeletePetById
     public void deletePet(int petId) {
         petService.deletePet(petId);
     }

@@ -15,12 +15,15 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.QueryValue;
 import io.micronaut.http.multipart.CompletedFileUpload;
+import io.micronaut.openapi.visitor.security.SecurityRule;
+import io.micronaut.security.annotation.Secured;
 import jakarta.inject.Inject;
 
 import java.io.IOException;
 
 @Controller("/pet/upload")
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class PetUploadController {
 
     private final UploadPetImpl uploadPet;

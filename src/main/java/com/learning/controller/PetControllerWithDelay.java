@@ -25,6 +25,8 @@ import io.micronaut.http.annotation.Post;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.annotation.Put;
 import io.micronaut.http.annotation.QueryValue;
+import io.micronaut.openapi.visitor.security.SecurityRule;
+import io.micronaut.security.annotation.Secured;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.inject.Inject;
 
@@ -35,6 +37,7 @@ import java.util.Random;
 @Controller("/pet/delay")
 @Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Secured(SecurityRule.IS_ANONYMOUS)
 public class PetControllerWithDelay {
 
     private final PetService petService;
